@@ -4,10 +4,12 @@
 \alias{plot.woRdleStatus}
 \title{plot.woRdleStatus}
 \usage{
-\method{plot}{woRdleStatus}(x)
+\method{plot}{woRdleStatus}(x, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{a woRdleStatus}
+
+\item{...}{unused}
 }
 \value{
 ggplot

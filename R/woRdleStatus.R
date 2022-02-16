@@ -1,21 +1,26 @@
 #' init
 #'
 #' @return woRdleStatus
-#' @export
+#'
 #'
 new_woRdleStatus <- function(){
   # define an object that can hold state of current knowledge
-  rc <- matrix(nrow = 5, ncol = 26, data = TRUE)
+  rc1 <- matrix(nrow = 5, ncol = 26, data = TRUE)
+  rc2 <- rep(FALSE,26)
   # label columns as letters
-  colnames(rc) <- LETTERS
+  names(rc2) <- colnames(rc1) <- LETTERS
+
   # label rows as letter position
-  rownames(rc) <- paste0("Position",1:5)
+  rownames(rc1) <- paste0("Position",1:5)
 
   # can now represent game with this matrix
   # status = TRUE is right letter right place
   # status = FALSE means letter not in that place
   # letter not in word implies Position 1-5 all FALSE
   # letter in wrong place implies only that position is False
+
+  rc <- list(status = rc1,
+             tried = rc2)
 
   class(rc) <- "woRdleStatus"
 
@@ -34,24 +39,25 @@ woRdleStatus <- function(){
 
 #' plot.woRdleStatus
 #'
-#' @param x
+#' @param x a woRdleStatus
+#' @param ... unused
 #'
 #' @return ggplot
 #' @export
 #'
-plot.woRdleStatus <- function(x){
+plot.woRdleStatus <- function(x,...){
   # collapse status down to display
-  green_pos <- which(rowSums(x)==1)
-  Green <- colSums(x[green_pos,]) > 0
-  Grey  <- colSums(x==FALSE, na.rm = TRUE) == 5
-  yellow_pos <- rowSums(x)
-  Yellow <-
-  df <- data.frame(letter = LETTERS,
-                   color = ifelse(Green == TRUE, "Green", "White"),
-                   xpos = NA,
-                   ypos = NA)
-  df$color <- ifelse(Grey == TRUE, "Grey", df$color)
-  df$color <- ifelse(Yellow == TRUE, "Yellow", df$color)
+  green_pos <- which(rowSums(x$status)==1)
+  Green <- colSums(x$status[green_pos,]) > 0
+  Grey  <- colSums(x$status==FALSE, na.rm = TRUE) == 5
+  Yellow <- x$tried * !(Green | Grey)
+
+  df <- dplyr::tibble(letter = LETTERS,
+                      color = ifelse(Green == TRUE, "Green", "White"),
+                      xpos = NA,
+                      ypos = NA ) %>%
+    dplyr::mutate(color = ifelse(Grey == TRUE, "Grey", color),
+                  color = ifelse(Yellow == TRUE, "Yellow", color))
 
   row1 <- "QWERTYUIOP"
   row2 <- "ASDFGHJKL"

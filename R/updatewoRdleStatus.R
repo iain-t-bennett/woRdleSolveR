@@ -31,14 +31,16 @@ updatewoRdleStatus <- function(x, guess){
 
     this.letterNum <- as.numeric(charToRaw(this.letter)) - 64
 
+    rc$tried[this.letterNum] <- TRUE
+
     if (this.resp == "G"){
-      rc[i,c(1:26)[-this.letterNum]] <- FALSE
+      rc$status[i,c(1:26)[-this.letterNum]] <- FALSE
     }
     if (this.resp == "Y"){
-      rc[i,this.letterNum] <- FALSE
+      rc$status[i,this.letterNum] <- FALSE
     }
     if (this.resp == "0"){
-      rc[1:5,this.letterNum] <- FALSE
+      rc$status[1:5,this.letterNum] <- FALSE
     }
   }
 

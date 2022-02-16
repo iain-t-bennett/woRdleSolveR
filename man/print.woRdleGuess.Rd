@@ -4,10 +4,12 @@
 \alias{print.woRdleGuess}
 \title{print a guess}
 \usage{
-\method{print}{woRdleGuess}(x)
+\method{print}{woRdleGuess}(x, ...)
 }
 \arguments{
 \item{x}{a guess object}
+
+\item{...}{unused}
 }
 \value{
 

@@ -38,7 +38,7 @@ letterStats <- function(words){
     dplyr::transmute(Word, best_letter = Letter, best_count = overall_count) %>%
     dplyr::arrange(Word, desc(best_count)) %>%
     dplyr::group_by(Word) %>%
-    dplyr::mutate(id = 1:n()) %>%
+    dplyr::mutate(id = 1:dplyr::n()) %>%
     dplyr::ungroup()
 
   # cast back to merge

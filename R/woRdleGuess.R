@@ -32,7 +32,7 @@ woRdleGuess <- function(word, response){
  return(rc)
 }
 
-#' woRdleGuess
+# woRdleGuess
 
 new_woRdleGuess <- function(word, response){
 
@@ -54,11 +54,12 @@ new_woRdleGuess <- function(word, response){
 #' print a guess
 #'
 #' @param x a guess object
+#' @param ... unused
 #'
 #' @return
 #' @export
 #'
-print.woRdleGuess <- function(x){
+print.woRdleGuess <- function(x,...){
 
   rg <- which(x$response == "G")
   ry <- which(x$response == "Y")
