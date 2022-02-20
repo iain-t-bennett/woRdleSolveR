@@ -7,7 +7,7 @@
 woRdle(target_word = NULL)
 }
 \arguments{
-\item{target_word}{}
+\item{target_word}{the game hidden word (defualt will be random)}
 }
 \value{
 a woRdle

@@ -1,6 +1,6 @@
 #' Class to represent a wordle game
 #'
-#' @param target_word
+#' @param target_word the game hidden word (defualt will be random)
 #'
 #' @return a woRdle
 #' @export
@@ -12,7 +12,7 @@ woRdle <- function(target_word = NULL){
     wordsdf <- read.csv(system.file(file = "extdata/wordlist.csv", package = "woRdleSolveR"))
     words <- wordsdf$words
 
-    target_word <- words[round(runif(1, min = 1, max = length(words)))]
+    target_word <- words[round(stats::runif(1, min = 1, max = length(words)))]
   }
 
   assertthat::assert_that(
@@ -38,79 +38,40 @@ new_woRdle <- function(target_word){
   return(rc)
 }
 
-#' Title
+
+#' Plotting function for woRdle S3 object
 #'
 #' @param x a woRdle object
-#' @param word the word being guessed
+#' @param ... unused. compliance with S3
 #'
-#' @return a woRdle object
+#' @return a plot
 #' @export
 #'
-updatewoRdle <- function(x, word){
+plot.woRdle <- function(x, ...){
 
   assertthat::assert_that(
     class(x) == "woRdle",
     msg = "x must be a woRdle"
   )
 
-  word <- toupper(word)
+  # as built of classes can just plot components
+  p.stat <- plot(x$status)
+  p.guess <- lapply(x$guesses, plot)
 
-  assertthat::assert_that(
-    nchar(word)==5,
-    msg = "word must be 5 letters"
-  )
-
-  # could check is in wordlist?
-
-  # increment guess count
-  rc <- x
-
-  rc$guess_count <- rc$guess_count + 1
-  this.guess <- checkword(word = word, target_word = rc$target)
-
-  rc$guesses[[rc$guess_count]] <- this.guess
-
-  rc$status <- updatewoRdleStatus(rc$status, this.guess)
-
-  return(rc)
-
-}
-
-
-# internal function that checks a word against a target
-
-checkword <- function(word, target_word){
-  assertthat::assert_that(
-    nchar(word)==5,
-    msg = "word must be 5 letters"
-  )
-  assertthat::assert_that(
-    nchar(word)==5,
-    msg = "target word must be 5 letters"
-  )
-
-  resp <- ""
-
-  for (i in 1:5){
-    this.letter <- substr(word, i,i)
-    this.target <- substr(target_word, i,i)
-    # default to not
-    this.resp <- "0"
-    # is letter in word?
-    if(grepl(this.letter, target_word, fixed = TRUE )) {
-      this.resp <- "Y"
+  # then combine the plots
+  if (x$guess_count == 0){
+    rc <- p.stat
+  } else  {
+    rc <- p.guess[[1]]
+    if (x$guess_count > 1 ){
+      for (i in 2:x$guess_count){
+        rc <- gridExtra::grid.arrange(rc, p.guess[[i]])
+      }
     }
-    # is letter in correct place?
-    if(this.letter == this.target){
-      this.resp <- "G"
-    }
-    resp <- paste0(resp, this.resp)
+    rc <- gridExtra::grid.arrange(rc, p.stat)
   }
 
-  rc <- woRdleGuess(word = word, response = resp)
-
   return(rc)
 }
-
 
 
