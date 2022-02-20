@@ -85,3 +85,39 @@ print.woRdleGuess <- function(x,...){
   cat(rc)
 
 }
+
+
+#' plot a guess
+#'
+#' @param x a guess object
+#' @param ... unused
+#'
+#' @return
+#' @export
+#'
+plot.woRdleGuess <- function(x,...){
+
+  df <- dplyr::tibble(
+    i = 1:5) %>%
+    mutate(
+      letter = x$word[i],
+      status = x$response[i],
+      color = ifelse(status == "G", "Green", ifelse(status == "Y", "Yellow", "Grey")),
+      xpos = i,
+      ypos = 1 )
+
+    df$color <- factor(df$color,
+                       ordered = TRUE,
+                       levels =  c("Green", "Grey", "Yellow"))
+
+  rc <- ggplot2::ggplot(data = df, aes(x= xpos, y = ypos, fill = color)) +
+    ggplot2::geom_tile() +
+    ggplot2::geom_text(aes(label = letter)) +
+    ggplot2::theme_void() +
+    ggplot2::scale_fill_manual(values = c("Green", "Grey", "Yellow"),
+                               drop = FALSE) +
+    ggplot2::theme(legend.position = "none")
+
+  return(rc)
+}
+
