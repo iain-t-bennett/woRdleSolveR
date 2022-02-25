@@ -54,22 +54,81 @@ plot.woRdle <- function(x, ...){
     msg = "x must be a woRdle"
   )
 
-  # as built of classes can just plot components
-  p.stat <- plot(x$status)
-  p.guess <- lapply(x$guesses, plot)
+  # get the guesses as a dataframe
 
-  # then combine the plots
-  rc <- gridExtra::grid.arrange(
-    p.guess[[1]],
-    p.guess[[2]],
-    p.guess[[3]],
-    p.guess[[4]],
-    p.guess[[5]],
-    p.guess[[6]],
-    p.stat,
-    ncol = 1
-  ) %>%
-    plot()
+  df <- expand.grid(guess_i = 1:6,
+                    letter_i = 1:5)
+
+  for (row in 1:nrow(df)){
+   df$letter[row] = x$guesses[[df$guess_i[row]]]$word[df$letter_i[row]]
+   df$status[row] = x$guesses[[df$guess_i[row]]]$response[df$letter_i[row]]
+  }
+
+  df <- df %>%
+    dplyr::mutate(
+      color = ifelse(status == "G", "Green", ifelse(status == "Y", "Yellow", "Grey")),
+      color = ifelse(letter == " ", "White", color),
+      ypos = (6-guess_i) * 2,
+      xpos = letter_i * 2
+    )
+
+  # get the status as a dataframe
+  green_pos <- which(rowSums(x$status$status)==1)
+  Green <- colSums(x$status$status[green_pos,]) > 0
+  Grey  <- colSums(x$status$status==FALSE, na.rm = TRUE) == 5
+  Yellow <- x$status$tried * !(Green | Grey)
+
+  df2 <- dplyr::tibble(letter = LETTERS,
+                      color = ifelse(Green == TRUE, "Green", "White"),
+                      xpos = NA,
+                      ypos = NA ) %>%
+    dplyr::mutate(color = ifelse(Grey == TRUE, "Grey", color),
+                  color = ifelse(Yellow == TRUE, "Yellow", color))
+
+  row1 <- "QWERTYUIOP"
+  row2 <- "ASDFGHJKL"
+  row3 <- "ZXCVBNM"
+
+  for (i in 1:26){
+    this.letter <- df2$letter[i]
+    if (grepl(this.letter, row1)){
+      df2$ypos[i] <- -2
+      df2$xpos[i] <- as.numeric(unlist(gregexpr(this.letter, row1))) + 0.5
+    }
+    if (grepl(this.letter, row2)){
+      df2$ypos[i] <- -3
+      df2$xpos[i] <- as.numeric(unlist(gregexpr(this.letter, row2))) + 1
+    }
+    if (grepl(this.letter, row3)){
+      df2$ypos[i] <- -4
+      df2$xpos[i] <- as.numeric(unlist(gregexpr(this.letter, row3))) + 2
+    }
+  }
+
+  # make a new df
+
+  df3 <- dplyr::bind_rows(
+    dplyr::transmute(df, type = "guess", xpos, ypos, letter, color),
+    dplyr::transmute(df2, type = "status", xpos, ypos, letter, color),
+  )
+
+
+  df3$color <- factor(df3$color,
+                      ordered = TRUE,
+                      levels =  c("Green", "Grey", "White", "Yellow"))
+
+  # make the plot
+
+  rc <- ggplot2::ggplot(data = df3, ggplot2::aes(x= xpos, y = ypos, fill = color)) +
+    ggplot2::geom_tile(data = function(x){dplyr::filter(x, type == "guess")},
+                       linetype = 1, size = 1, color = "black") +
+    ggplot2::geom_tile(data = function(x){dplyr::filter(x, type == "status")},
+                       linetype = 1, size = 1, color = "black") +
+    ggplot2::geom_text(ggplot2::aes(label = letter)) +
+    ggplot2::theme_void() +
+    ggplot2::scale_fill_manual(values = c("Green", "Grey", "White", "Yellow"),
+                               drop = FALSE) +
+    ggplot2::theme(legend.position = "none")
 
   return(rc)
 }

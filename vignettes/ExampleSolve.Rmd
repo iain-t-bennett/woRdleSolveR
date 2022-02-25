@@ -14,9 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 # setup
 
 ```{r packages}
-require(reshape2)
-require(ggplot2)
-require(dplyr)
 require(woRdleSolveR)
 ```
 
@@ -29,7 +26,9 @@ gametosolve <- woRdle()
 # S3 object so can plot to see status
 plot(gametosolve)
 ```
+
 # Round 1
+
 ## Generate a guess
 Generate an initial guess - this is same every time unless wordlist changes. 
 ```{r guess1}
@@ -44,9 +43,13 @@ gametosolve <- updatewoRdle(gametosolve,
                             guess = woRdleGuess("AROSE", "0YY00"))
 plot(gametosolve)
 ```
+
 # Round 2
+
 ## Generate a new guess
+
 Generate a new guess based on current game status. 
+
 ```{r guess2}
 algo_guess_v1(gametosolve)
 ```
@@ -61,14 +64,18 @@ plot(gametosolve)
 ```
 
 # Round 3
+
 ## Generate a new guess
 Generate a new guess based on current game status. 
 ```{r guess3}
 algo_guess_v1(gametosolve)
 ```
 The solution has been found.
+
 ## Update the game 
+
 Can update the game with this response and plot again if interested.
+
 ```{r guess3update}
 gametosolve <- updatewoRdle(gametosolve, 
                             guess = woRdleGuess("ROBIN", "GGGGG"))
