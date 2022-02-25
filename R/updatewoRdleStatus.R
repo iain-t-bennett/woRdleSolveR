@@ -1,16 +1,16 @@
 
 
-#' Updates a woRdleStatus with a woRdleGuess
-#'
-#' @param x a woRdleStatus
-#' @param guess a woRdleGuess
-#'
-#' @return a woRdleStatus
-#' @export
-#' @examples
-#' game_0 <- woRdleStatus()
-#' guess_1 <- woRdleGuess("APPLE", "YGG00")
-#' game_1 <- updatewoRdleStatus(game_0, guess_1)
+# Updates a woRdleStatus with a woRdleGuess
+#
+# @param x a woRdleStatus
+# @param guess a woRdleGuess
+#
+# @return a woRdleStatus
+# @export
+# @examples
+# game_0 <- woRdleStatus()
+# guess_1 <- woRdleGuess("APPLE", "YGG00")
+# game_1 <- updatewoRdleStatus(game_0, guess_1)
 updatewoRdleStatus <- function(x, guess){
 
   assertthat::assert_that(

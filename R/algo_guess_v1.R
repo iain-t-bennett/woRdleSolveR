@@ -1,7 +1,7 @@
 
 #' algo_guess_v1
 #'
-#' @param x a woRdleStatus
+#' @param x a woRdle object
 #'
 #' @return a word
 #' @export
@@ -9,8 +9,8 @@
 #'
 algo_guess_v1 <- function(x){
   assertthat::assert_that(
-    class(x) == "woRdleStatus",
-    msg = "x must be a woRdleStatus"
+    class(x) == "woRdle",
+    msg = "x must be a woRdle"
   )
 
   # find all valid words

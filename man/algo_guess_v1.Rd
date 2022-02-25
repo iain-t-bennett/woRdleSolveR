@@ -7,7 +7,7 @@
 algo_guess_v1(x)
 }
 \arguments{
-\item{x}{a woRdleStatus}
+\item{x}{a woRdle object}
 }
 \value{
 a word

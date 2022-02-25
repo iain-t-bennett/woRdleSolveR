@@ -45,19 +45,19 @@ letterStats <- function(words){
 
   pos_cast1 <- pos_count %>%
     dplyr::transmute(Word, variable = paste0("Letter_", Position), Letter) %>%
-    reshape2::dcast(Word~variable)
+    reshape2::dcast(Word~variable, value.var = "Letter")
 
   pos_cast2 <- pos_count %>%
     dplyr::transmute(Word, variable = paste0("PFreq_", Position), position_count) %>%
-    reshape2::dcast(Word~variable)
+    reshape2::dcast(Word~variable, value.var = "position_count")
 
   best_cast1 <- best_letter %>%
     dplyr::transmute(Word, variable = paste0("BestLetter_", id), best_letter) %>%
-    reshape2::dcast(Word~variable)
+    reshape2::dcast(Word~variable, value.var = "best_letter")
 
   best_cast2 <- best_letter %>%
     dplyr::transmute(Word, variable = paste0("BFreq_", id), best_count) %>%
-    reshape2::dcast(Word~variable)
+    reshape2::dcast(Word~variable, value.var = "best_count")
 
   rc <- pos_cast1 %>%
     dplyr::left_join(pos_cast2, by = "Word") %>%

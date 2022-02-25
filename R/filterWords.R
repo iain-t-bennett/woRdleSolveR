@@ -15,8 +15,8 @@ filterWords <- function(x, words = NULL){
   }
 
   assertthat::assert_that(
-    class(x) == "woRdleStatus",
-    msg = "x must be a woRdleStatus"
+    class(x) == "woRdle",
+    msg = "x must be a woRdle"
   )
 
   assertthat::assert_that(
@@ -25,14 +25,14 @@ filterWords <- function(x, words = NULL){
   )
 
   # must include are any tries that are still positive
-  must_have <- names(which(colSums(x$status) * x$tried>0))
+  must_have <- names(which(colSums(x$status$status) * x$status$tried>0))
 
   # basis remove any that are not possible
-  valid_L1 <- names(which(x$status[1,]==TRUE))
-  valid_L2 <- names(which(x$status[2,]==TRUE))
-  valid_L3 <- names(which(x$status[3,]==TRUE))
-  valid_L4 <- names(which(x$status[4,]==TRUE))
-  valid_L5 <- names(which(x$status[5,]==TRUE))
+  valid_L1 <- names(which(x$status$status[1,]==TRUE))
+  valid_L2 <- names(which(x$status$status[2,]==TRUE))
+  valid_L3 <- names(which(x$status$status[3,]==TRUE))
+  valid_L4 <- names(which(x$status$status[4,]==TRUE))
+  valid_L5 <- names(which(x$status$status[5,]==TRUE))
 
   df <- dplyr::tibble(Word = words) %>%
     dplyr::transmute(

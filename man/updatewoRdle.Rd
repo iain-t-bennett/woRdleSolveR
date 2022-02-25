@@ -2,18 +2,22 @@
 % Please edit documentation in R/updatewoRdle.R
 \name{updatewoRdle}
 \alias{updatewoRdle}
-\title{Title}
+\title{Title
+One of word or guess must be provided}
 \usage{
-updatewoRdle(x, word)
+updatewoRdle(x, word, guess)
 }
 \arguments{
 \item{x}{a woRdle object}
 
 \item{word}{the word being guessed}
+
+\item{guess}{a wordleGuess to apply}
 }
 \value{
 a woRdle object
 }
 \description{
 Title
+One of word or guess must be provided
 }

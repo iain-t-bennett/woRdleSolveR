@@ -1,0 +1,76 @@
+---
+title: "ExampleSolve"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ExampleSolve}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# setup
+
+```{r packages}
+require(reshape2)
+require(ggplot2)
+require(dplyr)
+require(woRdleSolveR)
+```
+
+# Initialise
+
+Class based so to solve a puzzle just set an initial status. For an example will use wordle with solution of ROBIN that is unknown to player. 
+
+```{r init}
+gametosolve <- woRdle()
+# S3 object so can plot to see status
+plot(gametosolve)
+```
+# Round 1
+## Generate a guess
+Generate an initial guess - this is same every time unless wordlist changes. 
+```{r guess1}
+algo_guess_v1(gametosolve)
+```
+With no information AROSE seems best option. Most frequent letters in most frequent places.
+
+## Update the game 
+If compare AROSE to the unknown solution ROBIN will see that response would get is Grey, Yellow, Yellow, Grey, Grey. Can now update the game with this response and plot again.
+```{r guess1update}
+gametosolve <- updatewoRdle(gametosolve, 
+                            guess = woRdleGuess("AROSE", "0YY00"))
+plot(gametosolve)
+```
+# Round 2
+## Generate a new guess
+Generate a new guess based on current game status. 
+```{r guess2}
+algo_guess_v1(gametosolve)
+```
+Now YOURN is the best option. Most frequent letters in most frequent places for possible workds.
+
+## Update the game 
+If compare YOURN to the unknown solution ROBIN will see that response would get is Grey, Green, Grey, Yellow, Green. Can now update the game with this response and plot again.
+```{r guess2update}
+gametosolve <- updatewoRdle(gametosolve, 
+                            guess = woRdleGuess("YOURN", "0G0YG"))
+plot(gametosolve)
+```
+
+# Round 3
+## Generate a new guess
+Generate a new guess based on current game status. 
+```{r guess3}
+algo_guess_v1(gametosolve)
+```
+The solution has been found.
+## Update the game 
+Can update the game with this response and plot again if interested.
+```{r guess3update}
+gametosolve <- updatewoRdle(gametosolve, 
+                            guess = woRdleGuess("ROBIN", "GGGGG"))
+plot(gametosolve)
+```

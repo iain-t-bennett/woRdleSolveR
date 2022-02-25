@@ -111,13 +111,18 @@ plot.woRdleGuess <- function(x,...){
                        levels =  c("Green", "Grey", "Yellow"))
 
   rc <- ggplot2::ggplot(data = df, aes(x= xpos, y = ypos, fill = color)) +
-    ggplot2::geom_tile() +
+    ggplot2::geom_tile(linetype = 1, size = 1, color = "black") +
     ggplot2::geom_text(aes(label = letter)) +
     ggplot2::theme_void() +
     ggplot2::scale_fill_manual(values = c("Green", "Grey", "Yellow"),
                                drop = FALSE) +
     ggplot2::theme(legend.position = "none")
 
+  return(rc)
+}
+
+woRdleGuessNull <- function(){
+  rc <- woRdleGuess(word = "     ", response = "00000")
   return(rc)
 }
 

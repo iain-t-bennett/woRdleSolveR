@@ -32,7 +32,7 @@ new_woRdle <- function(target_word){
   rc <- list(target = target_word,
              status = woRdleStatus(),
              guess_count = 0,
-             guesses = list())
+             guesses = lapply(1:6,function(x){woRdleGuessNull()}))
 
   class(rc) <- "woRdle"
   return(rc)
@@ -59,17 +59,17 @@ plot.woRdle <- function(x, ...){
   p.guess <- lapply(x$guesses, plot)
 
   # then combine the plots
-  if (x$guess_count == 0){
-    rc <- p.stat
-  } else  {
-    rc <- p.guess[[1]]
-    if (x$guess_count > 1 ){
-      for (i in 2:x$guess_count){
-        rc <- gridExtra::grid.arrange(rc, p.guess[[i]])
-      }
-    }
-    rc <- gridExtra::grid.arrange(rc, p.stat)
-  }
+  rc <- gridExtra::grid.arrange(
+    p.guess[[1]],
+    p.guess[[2]],
+    p.guess[[3]],
+    p.guess[[4]],
+    p.guess[[5]],
+    p.guess[[6]],
+    p.stat,
+    ncol = 1
+  ) %>%
+    plot()
 
   return(rc)
 }

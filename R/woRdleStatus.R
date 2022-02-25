@@ -1,8 +1,8 @@
-#' init
-#'
-#' @return woRdleStatus
-#'
-#'
+# init
+#
+# @return woRdleStatus
+#
+#
 new_woRdleStatus <- function(){
   # define an object that can hold state of current knowledge
   rc1 <- matrix(nrow = 5, ncol = 26, data = TRUE)
@@ -27,24 +27,24 @@ new_woRdleStatus <- function(){
   return(rc)
 }
 
-#' init
-#'
-#' @return woRdleStatus
-#' @export
-#'
+# init
+#
+# @return woRdleStatus
+# @export
+#
 woRdleStatus <- function(){
   rc <- new_woRdleStatus()
   return(rc)
 }
 
-#' plot.woRdleStatus
-#'
-#' @param x a woRdleStatus
-#' @param ... unused
-#'
-#' @return ggplot
-#' @export
-#'
+# plot.woRdleStatus
+#
+# @param x a woRdleStatus
+# @param ... unused
+#
+# @return ggplot
+# @export
+#
 plot.woRdleStatus <- function(x,...){
   # collapse status down to display
   green_pos <- which(rowSums(x$status)==1)
